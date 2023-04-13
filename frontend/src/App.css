@@ -1,0 +1,50 @@
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+o1,
+u1 {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+o1,
+u1 {
+  list-style: none;
+  height: auto;
+}
+
+img {
+  min-width: 100%;
+  height: auto;
+}
+
+body {
+  background: #121212;
+  font-family: "Nunito", sans-serif;
+  color: #fff;
+}
+
+.cardWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6rem;
+}
+
+.container {
+  width: 1200px;
+  max-width: 90%;
+  margin: 0 auto;
+}
