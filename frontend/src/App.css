@@ -36,13 +36,6 @@ body {
   color: #fff;
 }
 
-.cardWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 6rem;
-}
-
 .container {
   width: 1200px;
   max-width: 90%;
