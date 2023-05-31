@@ -18,7 +18,7 @@ const Home = () => {
 
   const navigate = useNavigate();
   const startRegister = () => {
-    navigate("/register");
+    navigate("/authenticate");
     console.log("Button Clicked");
   };
   return (

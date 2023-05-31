@@ -11,12 +11,12 @@ const steps = {
 
 const Authenticate = () => {
   const [step, setStep] = useState(1);
+  const Step = steps[step];
 
   const onNext = () => {
     setStep(step + 1);
   };
-  const Step = steps[step];
-  return <Step onNext={onNext} />;
+  return <Step onNext={onNext} />; // this will ensure to call onNext
 };
 
 export default Authenticate;

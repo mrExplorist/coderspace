@@ -10,12 +10,10 @@ import {
 import Activate from "./pages/Activate/Activate";
 import Authenticate from "./pages/Authenticate/Authenticate";
 import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
 import Navigation from "./components/shared/Navigation/Navigation";
-import Register from "./pages/Register/Register";
 import Rooms from "./pages/Rooms/Rooms";
 
-const isAuth = true;
+const isAuth = false;
 
 const user = {
   isActivated: false,
