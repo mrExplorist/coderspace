@@ -6,10 +6,26 @@ import Card from "../../../../components/shared/Card/Card";
 import { GiRotaryPhone } from "react-icons/gi";
 import { GrFormNextLink } from "react-icons/gr";
 import TextInput from "../../../../components/shared/TextInput/TextInput";
+import { sendOtp } from "../../../../http";
+import { setOtp } from "../../../../store/authSlice";
 import styles from "../StepPhoneEmail.module.css";
+import { useDispatch } from "react-redux";
 
 const Phone = ({ onNext }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
+  const dispatch = useDispatch();
+
+  async function submit() {
+    // server request
+
+    const { data } = await sendOtp({ phone: phoneNumber }); // receiving data from server
+    console.log(data);
+    dispatch(setOtp({ phone: data.phone, hash: data.hash }));
+
+    // calling onnext after getting otp
+
+    onNext();
+  }
   return (
     <Card
       title="Enter your Phone number "
@@ -24,7 +40,7 @@ const Phone = ({ onNext }) => {
           <Button
             text="Next"
             icon={<BsArrowRightShort fontSize="24px" />}
-            onClick={onNext}
+            onClick={submit}
           />
         </div>
         <p className={styles.bottomParagraph}>
