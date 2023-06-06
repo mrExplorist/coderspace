@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { BsRocketTakeoff } from "react-icons/bs";
 import Button from "../../components/shared/Button/Button";
 import Card from "../../components/shared/Card/Card";
-// import { SiSquarespace } from "react-icons/si";
-import { CgHello } from "react-icons/cg";
+
+import { MdRocketLaunch } from "react-icons/md";
 import { FcConferenceCall } from "react-icons/fc";
+
 import React from "react";
 import styles from "./Home.module.css";
 
@@ -24,7 +24,7 @@ const Home = () => {
   return (
     <div className={styles.cardWrapper}>
       <Card
-        title="Welcome to Coderspace!"
+        title="Welcome to Coderspace !"
         icon={<FcConferenceCall color="yellow" fontSize="44px" />}
       >
         <p className={styles.text}>
@@ -37,7 +37,7 @@ const Home = () => {
           <Button
             onClick={startRegister}
             text="Get your username!!"
-            icon={<BsRocketTakeoff />}
+            icon={<MdRocketLaunch fontSize="20px" color="cyan" />}
           />
         </div>
 

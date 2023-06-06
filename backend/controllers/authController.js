@@ -80,7 +80,7 @@ class AuthController {
     // Generate JWT Token
 
     const { accessToken, refreshToken } = tokenService.generateTokens({
-      id: user?._id,
+      _id: user?._id,
       isActivated: false,
     });
 

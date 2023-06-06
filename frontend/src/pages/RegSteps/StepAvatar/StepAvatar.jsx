@@ -6,11 +6,14 @@ import Button from "../../../components/shared/Button/Button";
 import Card from "../../../components/shared/Card/Card";
 import { useSelector, useDispatch } from "react-redux";
 import { setAvatar } from "../../../store/activateSlice";
+import { activate } from "../../../http";
 
 const StepAvatar = ({ onNext }) => {
   const dispatch = useDispatch();
   const [image, setImage] = useState("/images/monkey-avatar.png");
-  const { name } = useSelector((state) => state.activate);
+
+  const { name, avatar } = useSelector((state) => state.activate);
+
   function captureImage(e) {
     const file = e.target.files[0];
 
@@ -24,9 +27,15 @@ const StepAvatar = ({ onNext }) => {
       dispatch(setAvatar(reader.result));
     };
   }
-  const { avatar } = useSelector((state) => state.activate);
 
-  function submit() {}
+  async function submit() {
+    try {
+      const { data } = await activate({ name, avatar });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>

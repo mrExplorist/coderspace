@@ -5,6 +5,12 @@
 #files
 api.rest
 
+
+#folders
+storage
+
+
+
 # dependencies
 node_modules
 /.pnp
