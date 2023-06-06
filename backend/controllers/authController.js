@@ -103,6 +103,77 @@ class AuthController {
     res.json({ user: userDto, auth: true }); // sending user to client userDto represents a Data Transfer Object (DTO) or a simplified version of a user object that is intended to send to the client. It could contain selected properties or fields from the original user object, tailored for specific communication needs.
     // auth is a boolean property set to true, indicating that the user is authenticated or authorized
   }
+
+  // Refreshing accessToken with the help of refreshToken so that after page refresh we will not get logged out
+
+  async refresh(req, res) {
+    // get refreshToken from cookie
+
+    const { refreshToken: refreshTokenFromCookie } = req.cookies;
+
+    // check if refreshToken is valid
+
+    let userData;
+
+    try {
+      userData = await tokenService.verifyRefreshToken(refreshToken);
+      console.log(userData);
+    } catch (error) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    // check  if the refreshToken is in database
+
+    try {
+      const token = await tokenService.findRefreshToken(
+        userData._id,
+        refreshTokenFromCookie
+      );
+
+      if (!token) {
+        return res.status(401).json({ message: "Invalid token" });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: "Internal db error !" });
+    }
+
+    //check if valid user ,  confirming that user in refreshToken is in database
+
+    const user = await userService.findUser({ _id: userData._id });
+
+    if (!user) {
+      return res.status(401).json({ message: "No User" });
+    }
+
+    // Generate new tokens
+
+    const { refreshToken, accessToken } = tokenService.generateTokens({
+      _id: userData._id,
+    });
+
+    // update refreshToken in db
+
+    try {
+      await tokenService.updateRefreshToken(userData._id, refreshToken);
+    } catch (error) {
+      return res.status(500).json({ message: "Internal db error !" });
+    }
+
+    // put in cookie
+
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+      httpOnly: true,
+    });
+    res.cookie("accessToken", accessToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+      httpOnly: true,
+    });
+
+    // send response to client
+    const userDto = new UserDto(user);
+
+    res.json({ user: userDto, auth: true });
+  }
 }
 
 module.exports = new AuthController();
