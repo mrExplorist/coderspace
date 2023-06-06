@@ -7,6 +7,7 @@ import Card from "../../../components/shared/Card/Card";
 import { useSelector, useDispatch } from "react-redux";
 import { setAvatar } from "../../../store/activateSlice";
 import { activate } from "../../../http";
+import { setAuth } from "../../../store/authSlice";
 
 const StepAvatar = ({ onNext }) => {
   const dispatch = useDispatch();
@@ -31,6 +32,11 @@ const StepAvatar = ({ onNext }) => {
   async function submit() {
     try {
       const { data } = await activate({ name, avatar });
+
+      if (data.auth) {
+        dispatch(setAuth(data));
+      }
+
       console.log(data);
     } catch (error) {
       console.log(error);
