@@ -172,6 +172,17 @@ class AuthController {
 
     res.json({ user: userDto, auth: true }); // data that we are sending whenever refreshToken is updated and sent to the client
   }
+
+  // invalidating their authentication credentials. It involves removing the user's access token, clearing any stored user data, and redirecting the user to a designated logout page or the login page.
+  async logout(req, res) {
+    const { refreshToken } = req.cookies;
+    // delete refresh token from db
+    await tokenService.removeToken(refreshToken);
+    // delete cookies
+    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken");
+    res.json({ user: null, auth: false });
+  }
 }
 
 module.exports = new AuthController();
