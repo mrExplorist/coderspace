@@ -170,7 +170,7 @@ class AuthController {
     // send response to client
     const userDto = new UserDto(user);
 
-    res.json({ user: userDto, auth: true });
+    res.json({ user: userDto, auth: true }); // data that we are sending whenever refreshToken is updated and sent to the client
   }
 }
 

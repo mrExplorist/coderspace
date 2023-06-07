@@ -13,9 +13,19 @@ import Home from "./pages/Home/Home";
 import Navigation from "./components/shared/Navigation/Navigation";
 import Rooms from "./pages/Rooms/Rooms";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
+
+// Root component
 
 function App() {
-  return (
+  // call refresh endpoint
+
+  const { loading } = useLoadingWithRefresh();
+
+  return loading ? (
+    <h1>Loading ..</h1>
+  ) : (
     <Router>
       <Navigation />
       <Routes>
