@@ -80,7 +80,7 @@ class AuthController {
     // Generate JWT Token
 
     const { accessToken, refreshToken } = tokenService.generateTokens({
-      _id: user?._id,
+      _id: user._id,
       isActivated: false,
     });
 
@@ -107,17 +107,15 @@ class AuthController {
   // Refreshing accessToken with the help of refreshToken so that after page refresh we will not get logged out
 
   async refresh(req, res) {
-    // get refreshToken from cookie
-
-    const { refreshToken: refreshTokenFromCookie } = req.cookies;
+    const { refreshToken: refreshTokenFromCookie } = req.cookies; // getting refreshToken from cookie
 
     // check if refreshToken is valid
 
     let userData;
 
     try {
-      userData = await tokenService.verifyRefreshToken(refreshToken);
-      console.log(userData);
+      userData = await tokenService.verifyRefreshToken(refreshTokenFromCookie);
+      // console.log(userData);
     } catch (error) {
       return res.status(401).json({ message: "Invalid token" });
     }
@@ -141,7 +139,7 @@ class AuthController {
     const user = await userService.findUser({ _id: userData._id });
 
     if (!user) {
-      return res.status(401).json({ message: "No User" });
+      return res.status(404).json({ message: "No User" });
     }
 
     // Generate new tokens

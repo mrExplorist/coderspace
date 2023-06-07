@@ -21,7 +21,7 @@ class TokenService {
         userId,
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   }
 
@@ -36,7 +36,7 @@ class TokenService {
   async findRefreshToken(userId, refreshToken) {
     //  db querying
     return await refreshTokenModel.findOne({
-      _id: userId,
+      userId: userId,
       token: refreshToken,
     });
   }
