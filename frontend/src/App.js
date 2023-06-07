@@ -15,6 +15,7 @@ import Rooms from "./pages/Rooms/Rooms";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
+import Loader from "./components/shared/Loader/Loader";
 
 // Root component
 
@@ -24,7 +25,7 @@ function App() {
   const { loading } = useLoadingWithRefresh();
 
   return loading ? (
-    <h1>Loading ..</h1>
+    <Loader message="Loading ,  please wait ..." />
   ) : (
     <Router>
       <Navigation />

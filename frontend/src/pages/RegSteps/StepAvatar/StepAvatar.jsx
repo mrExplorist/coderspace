@@ -8,9 +8,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { setAvatar } from "../../../store/activateSlice";
 import { activate } from "../../../http";
 import { setAuth } from "../../../store/authSlice";
+import Loader from "../../../components/shared/Loader/Loader";
 
 const StepAvatar = ({ onNext }) => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
   const [image, setImage] = useState("/images/monkey-avatar.png");
 
   const { name, avatar } = useSelector((state) => state.activate);
@@ -30,6 +33,8 @@ const StepAvatar = ({ onNext }) => {
   }
 
   async function submit() {
+    if (!name || !avatar) return;
+    setLoading(true);
     try {
       const { data } = await activate({ name, avatar });
 
@@ -37,12 +42,15 @@ const StepAvatar = ({ onNext }) => {
         dispatch(setAuth(data));
       }
 
-      console.log(data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
+  if (loading) return <Loader message="Activation in progress ... " />;
   return (
     <>
       <Card
