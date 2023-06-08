@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import { TbBrandSpacehey } from "react-icons/tb";
+import { RiLogoutCircleRFill } from "react-icons/ri";
 import styles from "./Navigation.module.css";
 import { logout } from "../../../http";
 import { setAuth } from "../../../store/authSlice";
@@ -21,7 +22,7 @@ const Navigation = () => {
 
   const dispatch = useDispatch();
 
-  const { isAuth } = useSelector((state) => state.auth);
+  const { isAuth, user } = useSelector((state) => state.auth);
 
   async function logoutUser() {
     try {
@@ -34,11 +35,39 @@ const Navigation = () => {
   return (
     <nav className={`${styles.navbar} container`}>
       <Link style={brandStyle} to="/">
-        <TbBrandSpacehey color="yellow" fontSize="30px" />
+        <TbBrandSpacehey color="yellow" fontSize="38px" />
         <span style={logoText}>Coderspace</span>
       </Link>
 
-      {isAuth && <button onClick={logoutUser}>Logout</button>}
+      <div className={styles.navRight}>
+        <h3>{user?.name}</h3>
+        <Link to="/">
+          {user?.avatar && (
+            <div className={styles.imageContainer}>
+              <img
+                src={user?.avatar}
+                className={styles.avatar}
+                alt="avatar"
+                width="46"
+                height="46"
+              />
+            </div>
+          )}
+        </Link>
+        {isAuth && (
+          <button className={styles.logoutButton} onClick={logoutUser}>
+            <RiLogoutCircleRFill
+              color="#0077ff"
+              fontSize="46px"
+              style={{
+                position: "relative",
+                left: "8px",
+              }}
+            />
+          </button>
+        )}
+      </div>
+      {/* {isAuth && <button onClick={logoutUser}>Logout</button>} */}
     </nav>
   );
 };

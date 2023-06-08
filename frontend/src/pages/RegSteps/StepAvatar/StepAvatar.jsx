@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./StepAvatar.module.css";
 import { BsArrowRightShort } from "react-icons/bs";
 import { TfiThemifyFaviconAlt } from "react-icons/tfi";
@@ -13,10 +13,9 @@ import Loader from "../../../components/shared/Loader/Loader";
 const StepAvatar = ({ onNext }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  // const [unMounted, setUnMounted] = useState(false);
 
-  const [image, setImage] = useState("/images/monkey-avatar.png");
-
-  const { name, avatar } = useSelector((state) => state.activate);
+  const [image, setImage] = useState("");
 
   function captureImage(e) {
     const file = e.target.files[0];
@@ -28,9 +27,11 @@ const StepAvatar = ({ onNext }) => {
     reader.onloadend = function () {
       console.log(reader.result);
       setImage(reader.result);
-      dispatch(setAvatar(reader.result));
+      dispatch(setAvatar(reader?.result));
     };
   }
+
+  const { name, avatar } = useSelector((state) => state.activate);
 
   async function submit() {
     if (!name || !avatar) return;
@@ -41,14 +42,16 @@ const StepAvatar = ({ onNext }) => {
       if (data.auth) {
         dispatch(setAuth(data));
       }
-
-      setLoading(false);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
   }
+
+  //!memory leak warning fixes ..
+
+  //By returning a function from the useEffect hook, React will automatically invoke it when the component is unmounted, allowing to clean up any resources or subscriptions.
 
   if (loading) return <Loader message="Activation in progress ... " />;
   return (
