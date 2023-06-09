@@ -1,0 +1,67 @@
+.card {
+  background: #1d1d1d;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.speakers {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 20px 0;
+  /* background: #456443; */
+}
+.topic {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* Set the desired number of lines */
+  -webkit-line-clamp: 2;
+  /* Ensure the ellipsis is displayed */
+  text-overflow: ellipsis;
+}
+.avatars {
+  width: 40px; /* Adjust as per your requirements */
+  height: 40px; /* Adjust as per your requirements */
+  border-radius: 50%;
+  /* overflow: hidden; */
+  display: flex;
+}
+.avatars img {
+  margin-top: 40px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 3px solid #20bd5f;
+  border-radius: 50%;
+  background: #1d1d1d;
+}
+.avatars img:nth-child(2) {
+  margin-left: -20px;
+}
+.avatars img:not(:first-child) {
+  margin-left: -20px; /* Adjust the sidewise offset as needed */
+}
+
+.names {
+  margin-left: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.names span {
+  padding-bottom: 5px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.peopleCount {
+  text-align: right;
+}
+
+.peopleCount span {
+  font-weight: bold;
+  margin-right: 5px;
+}
