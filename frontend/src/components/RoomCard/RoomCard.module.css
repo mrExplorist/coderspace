@@ -22,8 +22,8 @@
   text-overflow: ellipsis;
 }
 .avatars {
-  width: 40px; /* Adjust as per your requirements */
-  height: 40px; /* Adjust as per your requirements */
+  width: 34px; /* Adjust as per your requirements */
+  height: 34px; /* Adjust as per your requirements */
   border-radius: 50%;
   /* overflow: hidden; */
   display: flex;

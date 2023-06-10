@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Rooms.module.css";
 import { MdSpatialAudioOff } from "react-icons/md";
 import { BiSearchAlt2 } from "react-icons/bi";
 import RoomCard from "../../components/RoomCard/RoomCard";
+import AddRoomModal from "../../components/Modals/AddRoomModal/AddRoomModal";
 
 const rooms = [
   {
@@ -99,6 +100,10 @@ const rooms = [
 ];
 
 const Rooms = () => {
+  function openModal() {
+    setShowModal(true);
+  }
+  const [showModal, setShowModal] = useState(false);
   return (
     <>
       <div className="container">
@@ -111,7 +116,7 @@ const Rooms = () => {
             </div>
           </div>
           <div className={styles.right}>
-            <button className={styles.startRoomButton}>
+            <button className={styles.startRoomButton} onClick={openModal}>
               <MdSpatialAudioOff color="#fff" fontSize="22px" />
               <span>Start a room</span>
             </button>
@@ -133,6 +138,7 @@ const Rooms = () => {
           ))}
         </div>
       </div>
+      {showModal && <AddRoomModal onClose={() => setShowModal(false)} />}
     </>
   );
 };
