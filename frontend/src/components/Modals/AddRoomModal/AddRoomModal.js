@@ -1,16 +1,32 @@
 import React, { useState } from "react";
 
-import TextInput from "../../shared/TextInput/TextInput";
 import styles from "./AddRoomModal.module.css";
 import { FcConferenceCall, FcGlobe, FcLock, FcPrivacy } from "react-icons/fc";
 import { GiFireworkRocket } from "react-icons/gi";
 
 import { IoMdClose } from "react-icons/io";
 import { MdRocketLaunch } from "react-icons/md";
+
+import TextInput from "../../shared/TextInput/TextInput";
+import { createRoom as create } from "../../../http";
+
 const AddRoomModal = ({ onClose }) => {
   const [roomType, setRoomType] = useState("open");
 
   const [topic, setTopic] = useState("");
+
+  // creating Room create function
+  async function createRoom() {
+    // server call
+
+    try {
+      if (!topic) return;
+      const { data } = await create({ topic, roomType });
+      console.log(data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
   return (
     <div className={styles.modalMask}>
       <div className={styles.modalBody}>
@@ -56,7 +72,7 @@ const AddRoomModal = ({ onClose }) => {
         </div>
         <div className={styles.modalFooter}>
           <h2>Start a room open to everyone</h2>
-          <button>
+          <button onClick={createRoom}>
             <MdRocketLaunch color="yellow" fontSize={26} />
             <span>Let's go</span>
           </button>

@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const activateController = require("./controllers/activateController");
 const authController = require("./controllers/authController");
+const roomsController = require("./controllers/roomsController");
 const authMiddleware = require("./middlewares/authMiddleware");
 
 // router.post(path, [middleware], callback)
@@ -13,6 +14,7 @@ router.get("/api/refresh", authController.refresh);
 
 router.post("/api/logout", authMiddleware, authController.logout);
 
+router.post("/api/rooms", authMiddleware, roomsController.create);
 module.exports = router;
 
 // CREATED THE ROUTER
