@@ -1,18 +1,16 @@
 import React, { useState } from "react";
-
-import styles from "./AddRoomModal.module.css";
-import { FcConferenceCall, FcGlobe, FcLock, FcPrivacy } from "react-icons/fc";
-import { GiFireworkRocket } from "react-icons/gi";
-
+import { useNavigate } from "react-router-dom";
+import { FcConferenceCall, FcGlobe, FcPrivacy } from "react-icons/fc";
 import { IoMdClose } from "react-icons/io";
 import { MdRocketLaunch } from "react-icons/md";
 
 import TextInput from "../../shared/TextInput/TextInput";
 import { createRoom as create } from "../../../http";
+import styles from "./AddRoomModal.module.css";
 
 const AddRoomModal = ({ onClose }) => {
+  const navigate = useNavigate();
   const [roomType, setRoomType] = useState("open");
-
   const [topic, setTopic] = useState("");
 
   // creating Room create function
@@ -22,6 +20,8 @@ const AddRoomModal = ({ onClose }) => {
     try {
       if (!topic) return;
       const { data } = await create({ topic, roomType });
+
+      navigate(`/room/${data.id}`);
       console.log(data);
     } catch (error) {
       console.log(error.message);
