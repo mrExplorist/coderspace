@@ -1,109 +1,123 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Rooms.module.css";
 import { MdSpatialAudioOff } from "react-icons/md";
 import { BiSearchAlt2 } from "react-icons/bi";
 import RoomCard from "../../components/RoomCard/RoomCard";
 import AddRoomModal from "../../components/Modals/AddRoomModal/AddRoomModal";
+import { getAllRooms } from "../../http";
 
-const rooms = [
-  {
-    id: 1,
-    topic:
-      "CampusBuddy provides a platform for students to create and join communities centred around interests or extracurricular activities? ",
-    speakers: [
-      {
-        id: 1,
-        name: "Sam Altman",
-        avatar: "/images/avatar.png",
-      },
-      {
-        id: 2,
-        name: "Elon Musk",
-        avatar: "/images/avatar.png",
-      },
-      {
-        id: 3,
-        name: "Ritesh Agrawal",
-        avatar: "/images/avatar.png",
-      },
-    ],
+// const rooms = [
+//   {
+//     id: 1,
+//     topic:
+//       "CampusBuddy provides a platform for students to create and join communities centred around interests or extracurricular activities? ",
+//     speakers: [
+//       {
+//         id: 1,
+//         name: "Sam Altman",
+//         avatar: "/images/avatar.png",
+//       },
+//       {
+//         id: 2,
+//         name: "Elon Musk",
+//         avatar: "/images/avatar.png",
+//       },
+//       {
+//         id: 3,
+//         name: "Ritesh Agrawal",
+//         avatar: "/images/avatar.png",
+//       },
+//     ],
 
-    totalParticipants: 40,
-  },
-  {
-    id: 2,
-    topic: "What's new in Machine Learning ? ",
-    speakers: [
-      {
-        id: 1,
-        name: "Speaker 3",
-        avatar: "/images/avatar.png",
-      },
-      {
-        id: 2,
-        name: "Speaker 3",
-        avatar: "/images/avatar.png",
-      },
-      {
-        id: 3,
-        name: "Speaker 3",
-        avatar: "/images/avatar.png",
-      },
-    ],
-    totalParticipants: 50,
-  },
-  {
-    id: 3,
-    topic: "Ongoing recession and layoffs in the tech industry?",
-    speakers: [
-      {
-        id: 1,
-        name: "Speaker 1",
-        avatar: "/images/avatar.png",
-      },
-      {
-        id: 2,
-        name: "Speaker 2",
-        avatar: "/images/avatar.png",
-      },
-      {
-        id: 3,
-        name: "Speaker 3",
-        avatar: "/images/avatar.png",
-      },
-    ],
-    totalParticipants: 35,
-  },
-  // Add more rooms here...
-  {
-    id: 4,
-    topic: "Threats of GPT'S ?",
-    speakers: [
-      {
-        id: 1,
-        name: "Speaker 1",
-        avatar: "/images/avatar.png",
-      },
-      {
-        id: 2,
-        name: "Speaker 2",
-        avatar: "/images/avatar.png",
-      },
-      {
-        id: 3,
-        name: "Speaker 3",
-        avatar: "/images/avatar.png",
-      },
-    ],
-    totalParticipants: 35,
-  },
-];
+//     totalParticipants: 40,
+//   },
+//   {
+//     id: 2,
+//     topic: "What's new in Machine Learning ? ",
+//     speakers: [
+//       {
+//         id: 1,
+//         name: "Speaker 3",
+//         avatar: "/images/avatar.png",
+//       },
+//       {
+//         id: 2,
+//         name: "Speaker 3",
+//         avatar: "/images/avatar.png",
+//       },
+//       {
+//         id: 3,
+//         name: "Speaker 3",
+//         avatar: "/images/avatar.png",
+//       },
+//     ],
+//     totalParticipants: 50,
+//   },
+//   {
+//     id: 3,
+//     topic: "Ongoing recession and layoffs in the tech industry?",
+//     speakers: [
+//       {
+//         id: 1,
+//         name: "Speaker 1",
+//         avatar: "/images/avatar.png",
+//       },
+//       {
+//         id: 2,
+//         name: "Speaker 2",
+//         avatar: "/images/avatar.png",
+//       },
+//       {
+//         id: 3,
+//         name: "Speaker 3",
+//         avatar: "/images/avatar.png",
+//       },
+//     ],
+//     totalParticipants: 35,
+//   },
+//   // Add more rooms here...
+//   {
+//     id: 4,
+//     topic: "Threats of GPT'S ?",
+//     speakers: [
+//       {
+//         id: 1,
+//         name: "Speaker 1",
+//         avatar: "/images/avatar.png",
+//       },
+//       {
+//         id: 2,
+//         name: "Speaker 2",
+//         avatar: "/images/avatar.png",
+//       },
+//       {
+//         id: 3,
+//         name: "Speaker 3",
+//         avatar: "/images/avatar.png",
+//       },
+//     ],
+//     totalParticipants: 35,
+//   },
+// ];
 
 const Rooms = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [rooms, setRooms] = useState([]);
+
+  // fetching all rooms from the database
+  useEffect(() => {
+    const fetchRooms = async () => {
+      const { data } = await getAllRooms();
+      setRooms(data);
+    };
+
+    fetchRooms();
+  }, []);
+
   function openModal() {
     setShowModal(true);
   }
-  const [showModal, setShowModal] = useState(false);
+
   return (
     <>
       <div className="container">
@@ -130,9 +144,6 @@ const Rooms = () => {
 
           {rooms.map((room) => (
             <>
-              <RoomCard key={room.id} room={room} />
-              <RoomCard key={room.id} room={room} />
-              <RoomCard key={room.id} room={room} />
               <RoomCard key={room.id} room={room} />
             </>
           ))}
