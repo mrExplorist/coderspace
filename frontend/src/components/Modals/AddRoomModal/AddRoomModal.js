@@ -9,6 +9,8 @@ import { IoMdClose } from "react-icons/io";
 import { MdRocketLaunch } from "react-icons/md";
 const AddRoomModal = ({ onClose }) => {
   const [roomType, setRoomType] = useState("open");
+
+  const [topic, setTopic] = useState("");
   return (
     <div className={styles.modalMask}>
       <div className={styles.modalBody}>
@@ -18,7 +20,11 @@ const AddRoomModal = ({ onClose }) => {
         <div className={styles.modalHeader}>
           <h3 className={styles.heading}>Enter the topic to be discussed</h3>
 
-          <TextInput fullwidth="true" />
+          <TextInput
+            fullwidth="true"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+          />
 
           <h2>Room types</h2>
           <div className={styles.roomTypes}>
