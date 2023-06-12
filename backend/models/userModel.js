@@ -10,7 +10,9 @@ var UserSchema = new Schema(
       type: String,
       required: false,
       get: (avatar) => {
-        return `${process.env.BASE_URL}${avatar}`;
+        if (avatar) {
+          return `${process.env.BASE_URL}${avatar}`;
+        }
       },
       // In JavaScript, a getter function is a special type of function that is used to retrieve the value of an object's property. It allows you to define custom logic for accessing a property, instead of directly accessing the property value.
     },

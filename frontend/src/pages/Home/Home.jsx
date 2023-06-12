@@ -19,7 +19,7 @@ const Home = () => {
   const navigate = useNavigate();
   const startRegister = () => {
     navigate("/authenticate");
-    console.log("Button Clicked");
+    // console.log("Button Clicked");
   };
   return (
     <div className={styles.cardWrapper}>

@@ -45,7 +45,7 @@ const Navigation = () => {
           {user?.avatar && (
             <div className={styles.imageContainer}>
               <img
-                src={user?.avatar}
+                src={user.avatar}
                 className={styles.avatar}
                 alt="avatar"
                 width="46"
@@ -67,6 +67,7 @@ const Navigation = () => {
           </button>
         )}
       </div>
+
       {/* {isAuth && <button onClick={logoutUser}>Logout</button>} */}
     </nav>
   );
