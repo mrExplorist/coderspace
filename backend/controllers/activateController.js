@@ -46,6 +46,7 @@ class ActivateController {
       user.isActivated = true;
       user.name = name;
       user.avatar = `/storage/${imagePath}`;
+
       user.save();
       res.json({ user: new UserDto(user), auth: true });
     } catch (error) {
