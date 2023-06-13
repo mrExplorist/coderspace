@@ -8,8 +8,19 @@ const DbConnect = require("./database");
 const cookieParser = require("cookie-parser");
 const router = require("./routes");
 
+// creating an HTTP server using the http module in Node.js and assigning it to the server variable. The created server can handle incoming HTTP requests and route them to the appropriate handlers defined in the provided app instance.
+
+const server = require("http").createServer(app);
+
 app.use(cookieParser());
 // app.use(cookieParser()) is a middleware function used in Express.js applications to parse cookies from incoming HTTP requests. It allows you to access and manipulate cookies in your routes and middleware functions.
+
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:3000", // allowing the local frontend server
+    methods: ["GET", "POST"],
+  },
+});
 
 // cors options
 const corsOptions = {
@@ -37,4 +48,4 @@ app.get("/", (req, res) => {
   res.send("Hello from express JS");
 });
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
