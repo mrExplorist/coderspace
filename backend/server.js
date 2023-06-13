@@ -7,6 +7,7 @@ const DbConnect = require("./database");
 
 const cookieParser = require("cookie-parser");
 const router = require("./routes");
+const ACTIONS = require("./actions");
 
 // creating an HTTP server using the http module in Node.js and assigning it to the server variable. The created server can handle incoming HTTP requests and route them to the appropriate handlers defined in the provided app instance.
 
@@ -24,8 +25,22 @@ const io = require("socket.io")(server, {
 
 // using websocket server SOCKETS
 
+const socketUserMapping = {};
+
 io.on("connection", (socket) => {
   console.log("new connection", socket.id);
+  socket.on(ACTIONS.JOIN, ({ roomId, user }) => {
+    socketUserMapping[socket.id] = user;
+
+    const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
+
+    clients.forEach((clientId) => {
+      io.to(clientId).emit(ACTIONS.ADD_PEER, {});
+    });
+    socket.emit(ACTIONS.ADD_PEER, {});
+    socket.join(roomId);
+    // console.log(clients);
+  });
 });
 
 // cors options

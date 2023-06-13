@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useStateWithCallback } from "./useStateWithCallback";
 
 import { socketInit } from "../socket";
+import { ACTIONS } from "../actions";
 // const users = [
 //   {
 //     id: 1,
@@ -65,7 +66,7 @@ export const useWebRTC = (roomId, user) => {
 
         // socket emit JOIN socket.io
 
-        socket.current.emit("join", {});
+        socket.current.emit(ACTIONS.JOIN, { roomId, user });
       });
     });
 
