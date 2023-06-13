@@ -16,7 +16,7 @@ const Room = () => {
         return (
           <div key={client.id}>
             <audio
-              ref={(instance) => provideRef(instance, client.id)}
+              ref={(instance) => provideRef(instance, client.id)} //ref attribute is used to create a reference to the rendered <audio> element. This reference can then be used to interact with or manipulate the <audio> element programmatically.
               controls
               autoPlay
             ></audio>

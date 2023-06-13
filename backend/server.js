@@ -22,6 +22,12 @@ const io = require("socket.io")(server, {
   },
 });
 
+// using websocket server SOCKETS
+
+io.on("connection", (socket) => {
+  console.log("new connection", socket.id);
+});
+
 // cors options
 const corsOptions = {
   credentials: true,
