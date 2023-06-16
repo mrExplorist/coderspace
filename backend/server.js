@@ -111,13 +111,13 @@ io.on("connection", (socket) => {
     // getting all the rooms in the socket
 
     const { rooms } = socket; // room map
-    Arrays.from(rooms).forEach((roomId) => {
+    Array.from(rooms).forEach((roomId) => {
       const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
 
       clients.forEach((clientId) => {
         io.to(clientId).emit(ACTIONS.REMOVE_PEER, {
           peerId: socket.id,
-          userId: socketUserMap[socket.id].id,
+          userId: socketUserMap[socket.id]?.id,
         });
 
         socket.emit(ACTIONS.REMOVE_PEER, {
@@ -133,8 +133,10 @@ io.on("connection", (socket) => {
     // deleting from = socketUserMap
     delete socketUserMap[socket.id];
   };
-
   socket.on(ACTIONS.LEAVE, leaveRoom);
+  socket.on("disconnecting", leaveRoom);
+
+  // The code socket.on("disconnecting", leaveRoom) registers an event listener for the "disconnecting" event on the socket object. When the socket is in the process of disconnecting from the server, the leaveRoom function is invoked. This allows for executing necessary actions, such as cleaning up resources or notifying other users about the disconnection, when a socket is about to disconnect.
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
