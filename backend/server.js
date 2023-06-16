@@ -122,7 +122,7 @@ io.on("connection", (socket) => {
 
         socket.emit(ACTIONS.REMOVE_PEER, {
           peerId: clientId,
-          userId: socketUserMap[clientId].id,
+          userId: socketUserMap[clientId]?.id,
         });
       });
 
@@ -136,7 +136,7 @@ io.on("connection", (socket) => {
   socket.on(ACTIONS.LEAVE, leaveRoom);
   socket.on("disconnecting", leaveRoom);
 
-  // The code socket.on("disconnecting", leaveRoom) registers an event listener for the "disconnecting" event on the socket object. When the socket is in the process of disconnecting from the server, the leaveRoom function is invoked. This allows for executing necessary actions, such as cleaning up resources or notifying other users about the disconnection, when a socket is about to disconnect.
+  // socket.on("disconnecting", leaveRoom) registers an event listener for the "disconnecting" event on the socket object. When the socket is in the process of disconnecting from the server, the leaveRoom function is invoked. This allows for executing necessary actions, such as cleaning up resources or notifying other users about the disconnection, when a socket is about to disconnect.
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
