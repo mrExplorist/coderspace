@@ -16,6 +16,7 @@ import freeice from "freeice";
 // ];
 
 export const useWebRTC = (roomId, user) => {
+  // clients in state
   const [clients, setClients] = useStateWithCallback([]);
 
   const audioElements = useRef({});
@@ -31,6 +32,11 @@ export const useWebRTC = (roomId, user) => {
   const localMediaStream = useRef(null);
 
   const socket = useRef(null);
+
+  // clients in ref
+  // we are using ref because we dont want to re-render the UI when client list changes
+  const clientsRef = useRef([]);
+
   useEffect(() => {
     socket.current = socketInit();
   }, []);
@@ -63,7 +69,7 @@ export const useWebRTC = (roomId, user) => {
 
     getMicrophoneStream().then(() => {
       // adding user in client list
-      addNewClient(user, () => {
+      addNewClient({ ...user, muted: true }, () => {
         const localElement = audioElements.current[user.id];
         if (localElement) {
           localElement.volume = 0;
@@ -125,7 +131,7 @@ export const useWebRTC = (roomId, user) => {
 
       // Handle on track on this connection
       connections.current[peerId].ontrack = ({ streams: [remoteStream] }) => {
-        addNewClient(remoteUser, () => {
+        addNewClient({ ...remoteUser, muted: true }, () => {
           if (audioElements.current[remoteUser.id]) {
             audioElements.current[remoteUser.id].srcObject = remoteStream;
           } else {
@@ -249,9 +255,80 @@ export const useWebRTC = (roomId, user) => {
     };
   }, []);
 
+  // ~----------------------> Listen for mute event / unmute event
+  // hooks ensure that when a mute or unmute event is received via the socket connection, the corresponding client's muted status is updated in the clients state array using the setMute function.
+
+  useEffect(() => {
+    // when client list changes then we need to update the ref with updated clients
+    clientsRef.current = clients;
+  }, [clients]);
+  // setting up event listeners for the ACTIONS.MUTE and ACTIONS.UNMUTE events on the socket.current object.
+  useEffect(() => {
+    socket.current.on(ACTIONS.MUTE, ({ peerId, userId }) => {
+      setMute(true, userId);
+    });
+
+    socket.current.on(ACTIONS.UNMUTE, ({ peerId, userId }) => {
+      setMute(false, userId);
+    });
+
+    //~ -------------> setMute fn
+
+    const setMute = (mute, userId) => {
+      //  retrieving the index of a client based on their user ID within the clientsRef.current array using the map() and indexOf() methods.
+
+      const clientIdx = clientsRef.current
+        .map((client) => client.id)
+        .indexOf(userId);
+
+      console.log("idx", clientIdx);
+      // Now we have index of the user that we have to mute
+      const connectedClients = JSON.parse(JSON.stringify(clientsRef.current));
+
+      if (clientIdx > -1) {
+        // console.log("mute/unmute", connectedClients);
+        connectedClients[clientIdx].muted = mute;
+        setClients(connectedClients);
+      }
+    };
+  }, []);
+
   const provideRef = (instance, userId) => {
     audioElements.current[userId] = instance;
   };
 
-  return { clients, provideRef };
+  //~------------------------------------------> Handling Mute and unmute ---------------------->
+
+  //The handleMute function handles muting and un-muting the audio track of a local media stream and emits corresponding MUTE or UNMUTE actions via a socket connection.
+
+  const handleMute = (isMute, userId) => {
+    console.log("mute clicked", isMute);
+
+    let settled = false;
+
+    if (userId === user.id) {
+      let interval = setInterval(() => {
+        if (localMediaStream.current) {
+          localMediaStream.current.getTracks()[0].enabled = !isMute;
+          if (isMute) {
+            socket.current.emit(ACTIONS.MUTE, {
+              roomId,
+              userId: user.id,
+            });
+          } else {
+            socket.current.emit(ACTIONS.UNMUTE, {
+              roomId,
+              userId: user.id,
+            });
+          }
+          settled = true;
+        }
+        if (settled) {
+          clearInterval(interval);
+        }
+      }, 200);
+    }
+  };
+
+  return { clients, provideRef, handleMute };
 };

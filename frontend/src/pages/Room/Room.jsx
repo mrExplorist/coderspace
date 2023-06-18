@@ -4,20 +4,31 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 
-import { BsArrowLeft } from "react-icons/bs";
+import { BsArrowLeft, BsFillMicFill } from "react-icons/bs";
 import { IoMdMicOff } from "react-icons/io";
 import { FaHandPeace, FaHandSparkles } from "react-icons/fa";
 import styles from "./Room.module.css";
 import { getRoom } from "../../http";
+
 const Room = () => {
   const { id: roomId } = useParams();
   const { user } = useSelector((state) => state.auth); //taking user from global state
 
-  const { clients, provideRef } = useWebRTC(roomId, user);
+  const { clients, provideRef, handleMute } = useWebRTC(roomId, user);
+  const navigate = useNavigate();
 
   const [room, setRoom] = useState(null);
+  const [isMuted, setMuted] = useState(true);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    handleMute(isMuted, user.id);
+  }, [isMuted]);
+
+  const handleMuteClick = (clientId) => {
+    if (clientId !== user.id) return;
+    setMuted((isMuted) => !isMuted);
+    // console.log("mute clicked", clientId);
+  };
 
   const handleManualLeave = () => {
     navigate("/rooms");
@@ -70,9 +81,15 @@ const Room = () => {
                     src={client.avatar}
                     alt="avatar"
                   />
-                  <button className={styles.micbtn}>
-                    {/* <BsFillMicFill color="#fff" fontSize={18} /> */}
-                    <IoMdMicOff color="#fff" fontSize={22} />
+                  <button
+                    onClick={() => handleMuteClick(client.id)}
+                    className={styles.micbtn}
+                  >
+                    {client.muted ? (
+                      <IoMdMicOff color="#fff" fontSize={22} />
+                    ) : (
+                      <BsFillMicFill color="#fff" fontSize={18} />
+                    )}
                   </button>
                   <h4>{client.name}</h4>
                 </div>

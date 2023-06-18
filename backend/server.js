@@ -8,6 +8,7 @@ const DbConnect = require("./database");
 const cookieParser = require("cookie-parser");
 const router = require("./routes");
 const ACTIONS = require("./actions");
+const { ChannelListInstance } = require("twilio/lib/rest/chat/v3/channel");
 
 // creating an HTTP server using the http module in Node.js and assigning it to the server variable. The created server can handle incoming HTTP requests and route them to the appropriate handlers defined in the provided app instance.
 
@@ -102,6 +103,37 @@ io.on("connection", (socket) => {
     io.to(peerId).emit(ACTIONS.SESSION_DESCRIPTION, {
       peerId: socket.id,
       sessionDescription,
+    });
+  });
+
+  // ~  defining event listeners for the ACTIONS.MUTE and ACTIONS.UNMUTE events on a Socket.IO server. They handle muting and un-muting actions received from clients in a specific room and propagate the corresponding actions to all other clients in the same room.
+
+  //& setting up an event listener for the ACTIONS.MUTE and ACTIONS.UNMUTE event. When this event is received, it executes a callback function with the provided payload { roomId, userId }.
+
+  // retrieving the list of clients (clientId) in the roomId room using io.sockets.adapter.rooms.get(roomId). If the room doesn't exist or is empty, it falls back to an empty array.
+
+  //iterating over each clientId and emitting the ACTIONS.MUTE event to each client in the room using io.to(clientId).emit(). The event payload contains the peerId (socket ID of the emitting client) and the userId of the user who initiated the mute action.
+
+  socket.on(ACTIONS.MUTE, ({ roomId, userId }) => {
+    const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
+
+    clients.forEach((clientId) => {
+      io.to(clientId).emit(ACTIONS.MUTE, {
+        peerId: socket.id,
+        userId,
+      });
+    });
+  });
+
+  //& setting up an event listener for the ACTIONS.UNMUTE event. When this event is received, it executes a callback function with the provided payload { roomId, userId }.
+
+  socket.on(ACTIONS.UNMUTE, ({ roomId, userId }) => {
+    const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
+    clients.forEach((clientId) => {
+      io.to(clientId).emit(ACTIONS.UNMUTE, {
+        peerId: socket.id,
+        userId,
+      });
     });
   });
 
