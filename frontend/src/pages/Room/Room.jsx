@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useWebRTC } from "../../hooks/useWebRTC";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -8,17 +8,30 @@ import { BsArrowLeft } from "react-icons/bs";
 import { IoMdMicOff } from "react-icons/io";
 import { FaHandPeace, FaHandSparkles } from "react-icons/fa";
 import styles from "./Room.module.css";
+import { getRoom } from "../../http";
 const Room = () => {
   const { id: roomId } = useParams();
   const { user } = useSelector((state) => state.auth); //taking user from global state
 
   const { clients, provideRef } = useWebRTC(roomId, user);
 
+  const [room, setRoom] = useState(null);
+
   const navigate = useNavigate();
 
   const handleManualLeave = () => {
     navigate("/rooms");
   };
+
+  useEffect(() => {
+    const fetchRoom = async () => {
+      const { data } = await getRoom(roomId);
+      console.log(data);
+      setRoom((prev) => data); // setting room data to state
+    };
+    fetchRoom();
+  }, [roomId]);
+
   return (
     <div>
       <div className="container">
@@ -30,7 +43,8 @@ const Room = () => {
       </div>
       <div className={styles.clientsWrap}>
         <div className={styles.header}>
-          <h2 className={styles.topic}>Boost Investment Portfolio</h2>
+          {/* will render topic dynamically fetch from room info */}
+          <h2 className={styles.topic}>{room?.topic}</h2>
           <div className={styles.actions}>
             <button>
               <FaHandSparkles color="yellow" fontSize={24} />
@@ -44,8 +58,8 @@ const Room = () => {
         <div className={styles.clientsList}>
           {clients.map((client) => {
             return (
-              <div className={styles.client}>
-                <div className={styles.userHead} key={client.id}>
+              <div className={styles.client} key={client.id}>
+                <div className={styles.userHead}>
                   <audio
                     ref={(instance) => provideRef(instance, client.id)} //ref attribute is used to create a reference to the rendered <audio> element. This reference can then be used to interact with or manipulate the <audio> element programmatically.
                     // controls
