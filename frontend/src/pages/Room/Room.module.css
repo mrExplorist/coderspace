@@ -118,3 +118,14 @@
   padding: 5px;
   box-shadow: 0px 0px 4px rgba(0, -0, -0, -0.25);
 }
+
+.micAnimation {
+  bottom: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 4px rgba(0, -0, -0, -0.25);
+}

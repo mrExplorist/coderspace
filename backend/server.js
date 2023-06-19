@@ -110,9 +110,9 @@ io.on("connection", (socket) => {
 
   //& setting up an event listener for the ACTIONS.MUTE and ACTIONS.UNMUTE event. When this event is received, it executes a callback function with the provided payload { roomId, userId }.
 
-  // retrieving the list of clients (clientId) in the roomId room using io.sockets.adapter.rooms.get(roomId). If the room doesn't exist or is empty, it falls back to an empty array.
+  // then retrieving the list of clients (clientId) in the roomId room using io.sockets.adapter.rooms.get(roomId). If the room doesn't exist or is empty, it falls back to an empty array.
 
-  //iterating over each clientId and emitting the ACTIONS.MUTE event to each client in the room using io.to(clientId).emit(). The event payload contains the peerId (socket ID of the emitting client) and the userId of the user who initiated the mute action.
+  //and iterating over each clientId and emitting the ACTIONS.MUTE event to each client in the room using io.to(clientId).emit(). The event payload contains the peerId (socket ID of the emitting client) and the userId of the user who initiated the mute action.
 
   socket.on(ACTIONS.MUTE, ({ roomId, userId }) => {
     const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);

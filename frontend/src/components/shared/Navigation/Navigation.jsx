@@ -36,6 +36,7 @@ const Navigation = () => {
     <nav className={`${styles.navbar} container`}>
       <Link style={brandStyle} to="/">
         <TbBrandSpacehey color="yellow" fontSize="38px" />
+
         <span style={logoText}>Coderspace</span>
       </Link>
 

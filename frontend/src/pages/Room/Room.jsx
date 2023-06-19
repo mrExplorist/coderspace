@@ -9,6 +9,7 @@ import { IoMdMicOff } from "react-icons/io";
 import { FaHandPeace, FaHandSparkles } from "react-icons/fa";
 import styles from "./Room.module.css";
 import { getRoom } from "../../http";
+import MicAnimation from "./MicAnimation";
 
 const Room = () => {
   const { id: roomId } = useParams();
@@ -58,7 +59,7 @@ const Room = () => {
           <h2 className={styles.topic}>{room?.topic}</h2>
           <div className={styles.actions}>
             <button>
-              <FaHandSparkles color="yellow" fontSize={24} />
+              <FaHandSparkles color="yellow" fontSize={26} />
             </button>
             <button onClick={handleManualLeave}>
               <FaHandPeace color="#F2BC1D" fontSize={22} />
@@ -74,7 +75,7 @@ const Room = () => {
                   <audio
                     ref={(instance) => provideRef(instance, client.id)} //ref attribute is used to create a reference to the rendered <audio> element. This reference can then be used to interact with or manipulate the <audio> element programmatically.
                     // controls
-                    // autoPlay
+                    autoPlay
                   ></audio>
                   <img
                     className={styles.avatar}
@@ -88,7 +89,9 @@ const Room = () => {
                     {client.muted ? (
                       <IoMdMicOff color="#fff" fontSize={22} />
                     ) : (
-                      <BsFillMicFill color="#fff" fontSize={18} />
+                      <div className={styles.micAnimation}>
+                        <MicAnimation />
+                      </div>
                     )}
                   </button>
                   <h4>{client.name}</h4>

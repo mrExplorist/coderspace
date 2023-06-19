@@ -4,16 +4,6 @@ import { useStateWithCallback } from "./useStateWithCallback";
 import { socketInit } from "../socket";
 import { ACTIONS } from "../actions";
 import freeice from "freeice";
-// const users = [
-//   {
-//     id: 1,
-//     name: "Ritesh Agarawal",
-//   },
-//   {
-//     id: 2,
-//     name: "Summit Shah",
-//   },
-// ];
 
 export const useWebRTC = (roomId, user) => {
   // clients in state
@@ -25,17 +15,11 @@ export const useWebRTC = (roomId, user) => {
 
   // to store all the peer connections we need a reference
 
-  const connections = useRef({
-    // socketId: connection
-  });
-
+  const connections = useRef({});
   const localMediaStream = useRef(null);
-
   const socket = useRef(null);
-
-  // clients in ref
+  const clientsRef = useRef([]); // clients in ref
   // we are using ref because we dont want to re-render the UI when client list changes
-  const clientsRef = useRef([]);
 
   useEffect(() => {
     socket.current = socketInit();
@@ -43,9 +27,7 @@ export const useWebRTC = (roomId, user) => {
 
   const addNewClient = useCallback(
     (newClient, cb) => {
-      // checking if client already exists or not
-      const lookingFor = clients.find((client) => client.id === newClient.id);
-
+      const lookingFor = clients.find((client) => client.id === newClient.id); // checking if client already exists or not
       // if not exists then add clients
       if (lookingFor === undefined) {
         setClients((existingClients) => [...existingClients, newClient], cb);
@@ -54,9 +36,12 @@ export const useWebRTC = (roomId, user) => {
     [clients, setClients]
   );
 
+  // The code snippet represents a useEffect hook that sets up a microphone stream, adds a new client, and handles joining and leaving a room in a real-time communication scenario
+
   useEffect(() => {
     const getMicrophoneStream = async () => {
       try {
+        // access the user's microphone
         localMediaStream.current = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
@@ -67,37 +52,27 @@ export const useWebRTC = (roomId, user) => {
       }
     };
 
+    // The getMicrophoneStream function is called immediately, and once it resolves, it executes additional logic inside the then block. It adds a new client with the provided user data to a client list and performs specific actions related to the local audio element, such as setting the srcObject property.
     getMicrophoneStream().then(() => {
-      // adding user in client list
       addNewClient({ ...user, muted: true }, () => {
         const localElement = audioElements.current[user.id];
         if (localElement) {
-          localElement.volume = 0;
+          // localElement.volume = 0;
           localElement.srcObject = localMediaStream.current;
         }
 
         // emitting a `JOIN` event from the frontend  to the server using the `socket.current` connection, passing the `roomId` and `user` data.
-
         socket.current.emit(ACTIONS.JOIN, { roomId, user });
       });
     });
 
-    // Leaving the room
+    // cleanup function defined in the return statement of the useEffect hook is responsible for cleaning up the resources when the component unmounts. It checks if localMediaStream exists, stops all tracks in the stream using getTracks().forEach((track) => track.stop()), and emits a LEAVE event to the server, passing the roomId.
     return () => {
       if (localMediaStream) {
         localMediaStream.current.getTracks().forEach((track) => track.stop());
         socket.current.emit(ACTIONS.LEAVE, { roomId });
       }
     };
-
-    // return () => {
-    //   isMounted = false;
-    //   if (audioStream) {
-    //     audioStream.getTracks().forEach((track) => {
-    //       track.stop();
-    //     });
-    //   }
-    // };
   }, []);
 
   // LIstening to add peer emit from the server to the client
@@ -107,10 +82,6 @@ export const useWebRTC = (roomId, user) => {
       // if already connected then give warning
 
       if (peerId in connections.current) {
-        //  connections = {
-        //   socketId: connection
-        // }
-
         return console.warn(
           `You are already connected with the ${peerId} (${user.name})`
         );
