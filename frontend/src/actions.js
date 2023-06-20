@@ -9,4 +9,5 @@ export const ACTIONS = {
   SESSION_DESCRIPTION: "session-description",
   MUTE: "mute",
   UNMUTE: "unmute",
+  MUTE_INFO: "mute-info",
 };
