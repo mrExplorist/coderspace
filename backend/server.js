@@ -19,7 +19,7 @@ app.use(cookieParser());
 // cors options
 const corsOptions = {
   credentials: true,
-  origin: ["http://localhost:3000"],
+  origin: [process.env.FRONT_URL],
 };
 
 // applying cors
@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000", // allowing the local frontend server
+    origin: process.env.FRONT_URL, // allowing the local frontend server
     methods: ["GET", "POST"],
   },
 });
