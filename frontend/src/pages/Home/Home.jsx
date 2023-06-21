@@ -24,7 +24,7 @@ const Home = () => {
   return (
     <div className={styles.cardWrapper}>
       <Card
-        title="Welcome to Coderspace !"
+        title="Welcome to Coderspacess!"
         icon={<FcConferenceCall color="yellow" fontSize="44px" />}
       >
         <p className={styles.text}>
@@ -36,7 +36,7 @@ const Home = () => {
         <div>
           <Button
             onClick={startRegister}
-            text="Get your username!!"
+            text="Let's Go!!"
             icon={<MdRocketLaunch fontSize="20px" color="cyan" />}
           />
         </div>

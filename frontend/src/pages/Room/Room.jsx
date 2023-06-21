@@ -89,6 +89,7 @@ const Room = () => {
                     {client.muted ? (
                       <IoMdMicOff color="#fff" fontSize={22} />
                     ) : (
+                      // <BsFillMicFill color="#fff" fontSize={22} />
                       <div className={styles.micAnimation}>
                         <MicAnimation />
                       </div>

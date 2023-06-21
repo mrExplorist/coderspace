@@ -1,0 +1,23 @@
+FROM node:16
+
+WORKDIR /frontend
+
+# Copy package.json and package-lock.json first for caching dependencies
+COPY ./frontend/package*.json ./
+
+# Set the ownership of the entire /frontend directory
+RUN chown -R node:node /frontend
+
+# Switch to the "node" user
+USER node
+
+# Copy package.json with ownership
+COPY --chown=node:node ./frontend/package.json .
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the project files
+COPY --chown=node:node ./frontend/ ./
+
+CMD ["npm", "run", "start"]

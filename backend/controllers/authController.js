@@ -20,8 +20,7 @@ class AuthController {
 
     // For making our code modular so build different controllers for each functionality
 
-    // const otp = await OtpService.generateOtp();
-    const otp = 7777;
+    const otp = await OtpService.generateOtp();
 
     // HASH
 
@@ -34,7 +33,7 @@ class AuthController {
     //Implementing send OTP service
 
     try {
-      // await OtpService.sendBySms(phone, otp);
+      await OtpService.sendBySms(phone, otp);
       res.json({
         hash: `${hash}.${expires}`,
         phone,
