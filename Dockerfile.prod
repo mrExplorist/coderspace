@@ -3,7 +3,8 @@ WORKDIR /frontend
 COPY ./frontend/package*.json ./
 RUN npm install
 COPY ./frontend/ ./
-RUN npm run build
+RUN npm run build 
+ENV NODE_OPTIONS="--max-old-space-size=1536"
 
 
 FROM ubuntu:18.04

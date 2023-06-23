@@ -7,8 +7,6 @@ const api = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-
-  //   http://localhost:5500/api/send-otp
 });
 
 //~ LIST OF ALL THE END POINTS
