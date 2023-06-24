@@ -3,7 +3,8 @@ WORKDIR /frontend
 COPY ./frontend/package*.json ./
 RUN npm install
 COPY ./frontend/ ./
-ENV NODE_OPTIONS="--max-old-space-size=1536"
+# Set the NODE_OPTIONS environment variable
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 RUN npm run build 
 
 
