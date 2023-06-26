@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Button from "../../../../components/shared/Button/Button";
 import Card from "../../../../components/shared/Card/Card";
 import { GiRotaryPhone } from "react-icons/gi";
-import { GrFormNextLink } from "react-icons/gr";
 import TextInput from "../../../../components/shared/TextInput/TextInput";
 import { sendOtp } from "../../../../http";
 import { setOtp } from "../../../../store/authSlice";
