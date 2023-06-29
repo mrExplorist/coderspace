@@ -5,6 +5,8 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import RoomCard from "../../components/RoomCard/RoomCard";
 import AddRoomModal from "../../components/Modals/AddRoomModal/AddRoomModal";
 import { getAllRooms } from "../../http";
+import { TbSourceCode } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 
 // const rooms = [
 //   {
@@ -101,6 +103,7 @@ import { getAllRooms } from "../../http";
 // ];
 
 const Rooms = () => {
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [rooms, setRooms] = useState([]);
 
@@ -133,6 +136,14 @@ const Rooms = () => {
             <button className={styles.startRoomButton} onClick={openModal}>
               <MdSpatialAudioOff color="#fff" fontSize="22px" />
               <span>Start a room</span>
+            </button>
+
+            <button
+              className={styles.codeEditorButton}
+              onClick={() => navigate(`/editor`)}
+            >
+              <TbSourceCode color="#fff" fontSize={22} />
+              <span>CodeSync</span>
             </button>
           </div>
         </div>

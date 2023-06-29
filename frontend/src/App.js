@@ -17,7 +17,9 @@ import { useState } from "react";
 import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
 import Loader from "./components/shared/Loader/Loader";
 import Room from "./pages/Room/Room";
-
+import EditorHome from "./pages/Editor/EditorHome";
+import { Toaster } from "react-hot-toast";
+import EditorPage from "./pages/Editor/EditorPage";
 // Root component
 
 function App() {
@@ -28,58 +30,89 @@ function App() {
   return loading ? (
     <Loader message="Loading ,  please wait ..." />
   ) : (
-    <Router>
-      <Navigation />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <GuestRoute>
-              <Home />
-            </GuestRoute>
-          }
-        />
-        {/* <Route path="/authenticate" element={<Authenticate />} /> */}
+    <>
+      <div>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            success: {
+              theme: {
+                primary: "green",
+              },
+            },
+          }}
+        ></Toaster>
+      </div>
+      <Router>
+        <Navigation />
 
-        {/* <Route path="/authenticate">element={<Authenticate />}</Route> */}
-        <Route
-          path="/authenticate"
-          element={
-            <GuestRoute>
-              <Authenticate />
-            </GuestRoute>
-          }
-        />
-        <Route
-          path="/activate"
-          element={
-            <SemiProtectedRoute>
-              <Activate />
-            </SemiProtectedRoute>
-          }
-        />
-        <Route
-          path="/rooms"
-          element={
-            <ProtectedRoute>
-              <Rooms />
-            </ProtectedRoute>
-          }
-        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <GuestRoute>
+                <Home />
+              </GuestRoute>
+            }
+          />
+          {/* <Route path="/authenticate" element={<Authenticate />} /> */}
 
-        <Route
-          path="/room/:id"
-          element={
-            <ProtectedRoute>
-              <Room />
-            </ProtectedRoute>
-          }
-        />
+          {/* <Route path="/authenticate">element={<Authenticate />}</Route> */}
+          <Route
+            path="/authenticate"
+            element={
+              <GuestRoute>
+                <Authenticate />
+              </GuestRoute>
+            }
+          />
+          <Route
+            path="/activate"
+            element={
+              <SemiProtectedRoute>
+                <Activate />
+              </SemiProtectedRoute>
+            }
+          />
+          <Route
+            path="/rooms"
+            element={
+              <ProtectedRoute>
+                <Rooms />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* <GuestRoute path="/authenticate">element={<Authenticate />}</GuestRoute>
+          <Route
+            path="/room/:id"
+            element={
+              <ProtectedRoute>
+                <Room />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/editor"
+            element={
+              <ProtectedRoute>
+                <EditorHome />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/editor/:id"
+            element={
+              <ProtectedRoute>
+                <EditorPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* <GuestRoute path="/authenticate">element={<Authenticate />}</GuestRoute>
         <Route path="/login" element={<Login />} /> */}
 
-        {/* <Route
+          {/* <Route
           path="/activate"
           element={
             <SemiProtectedRoute>
@@ -87,8 +120,9 @@ function App() {
             </SemiProtectedRoute>
           }
         /> */}
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </>
   );
 }
 
