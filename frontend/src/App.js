@@ -5,6 +5,7 @@ import {
   Route,
   BrowserRouter as Router,
   Routes,
+  useLocation,
 } from "react-router-dom";
 
 import Activate from "./pages/Activate/Activate";
@@ -13,13 +14,15 @@ import Home from "./pages/Home/Home";
 import Navigation from "./components/shared/Navigation/Navigation";
 import Rooms from "./pages/Rooms/Rooms";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+
 import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
 import Loader from "./components/shared/Loader/Loader";
 import Room from "./pages/Room/Room";
-import EditorHome from "./pages/Editor/EditorHome";
+
 import { Toaster } from "react-hot-toast";
-import EditorPage from "./pages/Editor/EditorPage";
+import EditorHome from "./pages/Editor/EditorHome/EditorHome";
+import EditorPage from "./pages/Editor/EditorPage/EditorPage";
+
 // Root component
 
 function App() {
@@ -43,6 +46,7 @@ function App() {
           }}
         ></Toaster>
       </div>
+
       <Router>
         <Navigation />
 
@@ -55,9 +59,7 @@ function App() {
               </GuestRoute>
             }
           />
-          {/* <Route path="/authenticate" element={<Authenticate />} /> */}
 
-          {/* <Route path="/authenticate">element={<Authenticate />}</Route> */}
           <Route
             path="/authenticate"
             element={
@@ -108,18 +110,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-          {/* <GuestRoute path="/authenticate">element={<Authenticate />}</GuestRoute>
-        <Route path="/login" element={<Login />} /> */}
-
-          {/* <Route
-          path="/activate"
-          element={
-            <SemiProtectedRoute>
-              <Activate />
-            </SemiProtectedRoute>
-          }
-        /> */}
         </Routes>
       </Router>
     </>
@@ -140,6 +130,7 @@ function SemiProtectedRoute({ children }) {
     <Navigate to="/rooms" replace />
   );
 }
+
 function ProtectedRoute({ children }) {
   const { user, isAuth } = useSelector((state) => state.auth);
   return !isAuth ? (
@@ -150,25 +141,5 @@ function ProtectedRoute({ children }) {
     children
   );
 }
-
-// const GuestRoute = ({ children, ...rest }) => {
-//   return (
-//     <Route
-//       {...rest}
-//       render={({ location }) => {
-//         return isAuth ? <Navigate to="/rooms" replace={true} /> : children;
-//       }}
-//     ></Route>
-//   );
-// };
-// function SemiProtectedRoute({ children }) {
-//   return !isAuth ? (
-//     <Navigate to="/" replace={true} />
-//   ) : isAuth && !user.isActivated ? (
-//     <>{children}</>
-//   ) : (
-//     <Navigate to="/rooms" />
-//   );
-// }
 
 export default App;

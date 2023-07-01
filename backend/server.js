@@ -137,6 +137,22 @@ io.on("connection", (socket) => {
     });
   });
 
+  //& setting up an event listener for the ACTIONS.CODE_CHANGE event. When this event is received, it executes a callback function with the provided payload { roomId, userId, message }.
+
+  socket.on(ACTIONS.CODE_CHANGE, ({ roomId, code }) => {
+    // console.log("Receiving", code);
+
+    // io.to(roomId).emit(ACTIONS.CODE_CHANGE, {
+    //   code,
+    // });
+
+    // doing the same thing as above but with socket.in the same room as the client we received from the code from and emitting the code to all the clients in the room except the client we received the code from (socket.id) using socket.in(roomId).emit() instead of io.to(roomId).emit(). This is because we don't want to send the code back to the client who sent it in the first place. This is a common pattern in Socket.IO to send events to all clients in a room except the sender.This is equivalent to the following code: socket.broadcast.to(roomId).emit(ACTIONS.CODE_CHANGE, { code });
+
+    socket.in(roomId).emit(ACTIONS.CODE_CHANGE, {
+      code,
+    });
+  });
+
   // Leaving the room
 
   const leaveRoom = ({ roomId }) => {
@@ -172,4 +188,3 @@ io.on("connection", (socket) => {
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-// what is this code all about ?

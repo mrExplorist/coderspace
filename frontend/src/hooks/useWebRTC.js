@@ -3,6 +3,7 @@ import { ACTIONS } from "../actions";
 import { socketInit } from "../socket";
 import freeice from "freeice";
 import { useStateWithCallback } from "./useStateWithCallback";
+import { toast } from "react-hot-toast";
 
 export const useWebRTC = (roomId, user) => {
   const [clients, setClients] = useStateWithCallback([]);
@@ -72,9 +73,11 @@ export const useWebRTC = (roomId, user) => {
       }
       async function handleNewPeer({ peerId, createOffer, user: remoteUser }) {
         if (peerId in connections.current) {
-          return console.warn(
+          console.warn(
             `You are already connected with ${peerId} (${user.name})`
           );
+        } else {
+          toast.success(`${remoteUser.name} connected`);
         }
 
         // Create a new RTCPeerConnection and store it in connections
@@ -148,6 +151,11 @@ export const useWebRTC = (roomId, user) => {
 
         delete connections.current[peerId];
         delete audioElements.current[peerId];
+
+        toast.success(
+          `${clientsRef.current.find((c) => c.id === userId).name} disconnected`
+        );
+
         setClients((list) => list.filter((c) => c.id !== userId));
       }
       async function handleIceCandidate({ peerId, icecandidate }) {
@@ -249,6 +257,7 @@ export const useWebRTC = (roomId, user) => {
   return {
     clients,
     provideRef,
+    socket,
     handleMute,
   };
 };

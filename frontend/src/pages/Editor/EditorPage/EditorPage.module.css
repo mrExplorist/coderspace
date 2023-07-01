@@ -1,0 +1,70 @@
+.mainWrap {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  height: 90vh;
+}
+
+.aside {
+  background-color: #1c1e29;
+  padding: 16px;
+  border-right: 2px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+}
+
+.asideInner {
+  flex: 1;
+}
+.syncLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: #f8f8f8;
+  border-radius: 10%;
+  margin-bottom: 1rem;
+  /* justify-content: space-between; */
+}
+
+.asideInner h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4aee88;
+  border-bottom: 1px solid #4aee88;
+}
+.asideInner .logoName {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.clientsList {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  gap: 10px;
+}
+
+.copyBtn {
+  padding: 0.3rem;
+  border: 1px solid #4aee88;
+  border-radius: 0.5rem;
+  color: #000;
+  font-size: 1rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.leaveBtn {
+  padding: 0.3rem;
+  border: 1px solid #4aee88;
+  border-radius: 0.5rem;
+  color: #000;
+  font-size: 1rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  margin-top: 1rem;
+  background: #4aee88;
+}

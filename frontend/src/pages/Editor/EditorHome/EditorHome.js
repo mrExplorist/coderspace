@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Card from "../../components/shared/Card/Card";
+import Card from "../../../components/shared/Card/Card";
 import { TbBinaryTree } from "react-icons/tb";
 import styles from "./EditorHome.module.css";
 import { useSelector } from "react-redux";
