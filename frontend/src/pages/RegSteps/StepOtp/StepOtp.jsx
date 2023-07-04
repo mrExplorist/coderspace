@@ -28,7 +28,7 @@ const StepOtp = ({ onNext }) => {
   }
   return (
     <>
-      <div className={styles.cardWrapper}>
+      <div className="cardWrapper">
         <Card
           title="Enter the code we just texted you"
           icon={<FcUnlock fontSize="44px" />}
