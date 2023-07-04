@@ -10,8 +10,7 @@ Elevate your Coding Experience: Coderspace - Unleash the Potential of Real-time 
 - 🤝 **Pair Programming**: Collaborate with other developers in real-time, allowing simultaneous code editing, chat, and audio communication. 👥💻💬🎤
 - 🔄 **Code Sync**: Enable synchronized code editing in real-time, allowing all participants to see and interact with code changes as they happen. 🔄💻
 - 📝 **Live Whiteboard**: Facilitate brainstorming and visual explanations through a shared whiteboard where participants can draw, write, and annotate. 📝🎨
-- ✋ **Raise Hand**: Participants can raise their hand to indicate that they have a question or need assistance, triggering a visual notification for others. 🙋‍♂️🙋‍♀️✋
-- 🍞 **Toasts**: Display toast messages to participants when important events occur, such as someone raising their hand or joining/leaving the room. 🍞📢
+- ✋ **Raise Hand**: Participants can raise their hand to indicate that they have a question or need assistance, triggering a visual notification for others.
 
 ## Technologies Used 💻
 

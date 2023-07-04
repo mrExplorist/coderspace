@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 
-import { BsArrowLeft, BsFillMicFill } from "react-icons/bs";
+import { BsArrowLeft } from "react-icons/bs";
 import { IoMdMicOff } from "react-icons/io";
 import { FaHandPeace, FaHandSparkles } from "react-icons/fa";
 import styles from "./Room.module.css";
