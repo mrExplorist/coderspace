@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import { TbBrandSpacehey } from "react-icons/tb";
-import { RiLogoutCircleRFill } from "react-icons/ri";
+import { IoLogOut } from "react-icons/io5";
 import styles from "./Navigation.module.css";
 import { logout } from "../../../http";
 import { setAuth } from "../../../store/authSlice";
@@ -22,7 +22,7 @@ const Navigation = () => {
 
   const dispatch = useDispatch();
 
-  const { isAuth, user } = useSelector((state) => state.auth);
+  const { isAuth, user } = useSelector(state => state.auth);
 
   async function logoutUser() {
     try {
@@ -57,7 +57,7 @@ const Navigation = () => {
         </Link>
         {isAuth && (
           <button className={styles.logoutButton} onClick={logoutUser}>
-            <RiLogoutCircleRFill
+            <IoLogOut
               color="#0077ff"
               fontSize="46px"
               style={{
