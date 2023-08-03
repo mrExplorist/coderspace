@@ -7,6 +7,7 @@ import { socketInit } from "../../../socket";
 import { ACTIONS } from "../../../actions";
 import {
   useLocation,
+  useNavigate,
   useParams,
   // Navigate,
 } from "react-router-dom";
@@ -18,9 +19,9 @@ const EditorPage = () => {
   const { id: roomId } = useParams();
 
   // const location = useLocation();
-  // const reactNavigator = useNavigate();
+  const reactNavigator = useNavigate();
 
-  const { user } = useSelector((state) => state.auth); //taking user from global state
+  const { user } = useSelector(state => state.auth); //taking user from global state
 
   const { clients, socket } = useWebRTC(roomId, user);
 
@@ -50,6 +51,20 @@ const EditorPage = () => {
   //   return <Navigate to="/" />;
   // }
 
+  const copyRoomId = async () => {
+    try {
+      await navigator.clipboard.writeText(roomId);
+      toast.success("ROOM ID copied to clipboard");
+    } catch (error) {
+      toast.error("Failed to copy ROOM ID");
+      console.log(error);
+    }
+  };
+
+  const leaveRoom = () => {
+    reactNavigator("/");
+  };
+
   return (
     <div className={styles.mainWrap}>
       <div className={styles.aside}>
@@ -59,13 +74,17 @@ const EditorPage = () => {
           </div>
           <h3>Connected</h3>
           <div className={styles.clientsList}>
-            {clients.map((client) => (
+            {clients.map(client => (
               <Client key={client.socketId} username={client.name} />
             ))}
           </div>
         </div>
-        <button className={styles.copyBtn}>Copy ROOM ID</button>
-        <button className={styles.leaveBtn}>Leave</button>
+        <button className={styles.copyBtn} onClick={copyRoomId}>
+          Copy ROOM ID
+        </button>
+        <button className={styles.leaveBtn} onClick={leaveRoom}>
+          Leave
+        </button>
       </div>
       <div className={styles.editorWrap}>
         <Editor socketRef={socket} roomId={roomId} />

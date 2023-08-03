@@ -33,7 +33,7 @@ const Editor = ({ socketRef, roomId }) => {
           matchTags: true,
           foldGutter: true,
           gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-        }
+        },
       );
 
       // Listen for changes in the editor and send them to the server over Socket.io server socket connection
@@ -72,6 +72,11 @@ const Editor = ({ socketRef, roomId }) => {
         }
       });
     }
+    return () => {
+      if (socketRef.current) {
+        socketRef.current?.off(ACTIONS.CODE_CHANGE);
+      }
+    };
   }, [socketRef.current]);
 
   return <textarea id="realTimeEditor"></textarea>;
