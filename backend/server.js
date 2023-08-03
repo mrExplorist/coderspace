@@ -55,7 +55,7 @@ const io = require("socket.io")(server, {
 
 const socketUserMap = {};
 
-io.on("connection", (socket) => {
+io.on("connection", socket => {
   console.log("new connection", socket.id);
   socket.on(ACTIONS.JOIN, ({ roomId, user }) => {
     socketUserMap[socket.id] = user;
@@ -66,7 +66,7 @@ io.on("connection", (socket) => {
 
     // Getting all the clients
 
-    clients.forEach((clientId) => {
+    clients.forEach(clientId => {
       io.to(clientId).emit(ACTIONS.ADD_PEER, {
         peerId: socket.id,
         createOffer: false,
@@ -117,7 +117,7 @@ io.on("connection", (socket) => {
   socket.on(ACTIONS.MUTE, ({ roomId, userId }) => {
     const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
 
-    clients.forEach((clientId) => {
+    clients.forEach(clientId => {
       io.to(clientId).emit(ACTIONS.MUTE, {
         peerId: socket.id,
         userId,
@@ -129,7 +129,7 @@ io.on("connection", (socket) => {
 
   socket.on(ACTIONS.UNMUTE, ({ roomId, userId }) => {
     const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
-    clients.forEach((clientId) => {
+    clients.forEach(clientId => {
       io.to(clientId).emit(ACTIONS.UNMUTE, {
         peerId: socket.id,
         userId,
@@ -152,17 +152,21 @@ io.on("connection", (socket) => {
       code,
     });
   });
-
+  socket.on(ACTIONS.SYNC_CODE, ({ peerId, code }) => {
+    io.to(peerId).emit(ACTIONS.CODE_CHANGE, {
+      code,
+    });
+  });
   // Leaving the room
 
   const leaveRoom = ({ roomId }) => {
     // getting all the rooms in the socket
 
     const { rooms } = socket; // room map
-    Array.from(rooms).forEach((roomId) => {
+    Array.from(rooms).forEach(roomId => {
       const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
 
-      clients.forEach((clientId) => {
+      clients.forEach(clientId => {
         io.to(clientId).emit(ACTIONS.REMOVE_PEER, {
           peerId: socket.id,
           userId: socketUserMap[socket.id]?.id,

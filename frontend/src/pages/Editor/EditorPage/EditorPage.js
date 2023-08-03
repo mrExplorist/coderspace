@@ -1,19 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
-import Editor from "../../../components/Editor/Editor";
-import styles from "./EditorPage.module.css";
-import Client from "../../../components/Client/Client";
-import { MdScreenShare } from "react-icons/md";
-import { socketInit } from "../../../socket";
-import { ACTIONS } from "../../../actions";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  // Navigate,
-} from "react-router-dom";
+import React from "react";
 import { toast } from "react-hot-toast";
+import { MdScreenShare } from "react-icons/md";
 import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import Client from "../../../components/Client/Client";
+import Editor from "../../../components/Editor/Editor";
 import { useWebRTC } from "../../../hooks/useWebRTC";
+import styles from "./EditorPage.module.css";
 
 const EditorPage = () => {
   const { id: roomId } = useParams();
@@ -23,7 +16,7 @@ const EditorPage = () => {
 
   const { user } = useSelector(state => state.auth); //taking user from global state
 
-  const { clients, socket } = useWebRTC(roomId, user);
+  const { clients, socket, codeRef } = useWebRTC(roomId, user);
 
   // const socketRef = useRef();
   // useEffect(() => {
@@ -87,7 +80,13 @@ const EditorPage = () => {
         </button>
       </div>
       <div className={styles.editorWrap}>
-        <Editor socketRef={socket} roomId={roomId} />
+        <Editor
+          socketRef={socket}
+          roomId={roomId}
+          onCodeChange={code => {
+            codeRef.current = code;
+          }}
+        />
       </div>
     </div>
   );

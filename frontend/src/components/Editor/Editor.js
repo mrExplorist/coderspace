@@ -15,7 +15,7 @@ import "codemirror/addon/fold/comment-fold.js";
 
 import { ACTIONS } from "../../actions";
 
-const Editor = ({ socketRef, roomId }) => {
+const Editor = ({ socketRef, roomId, onCodeChange }) => {
   const editorRef = useRef(null);
 
   useEffect(() => {
@@ -54,6 +54,7 @@ const Editor = ({ socketRef, roomId }) => {
           });
         }
         // console.log(code);
+        onCodeChange(code);
       });
 
       // Listen for changes in the editor and send them to the server over Socket.io server socket connection

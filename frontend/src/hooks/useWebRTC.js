@@ -10,20 +10,21 @@ export const useWebRTC = (roomId, user) => {
   const audioElements = useRef({});
   const connections = useRef({}); // to store all the peer connections we need a reference
   const socket = useRef(null);
+  const codeRef = useRef(null);
   const localMediaStream = useRef(null);
   // we are using ref because we don't want to re-render the UI when client list changes
   const clientsRef = useRef(null);
 
   const addNewClient = useCallback(
     (newClient, cb) => {
-      const lookingFor = clients.find((client) => client.id === newClient.id);
+      const lookingFor = clients.find(client => client.id === newClient.id);
 
       if (lookingFor === undefined) {
         //  Add the new client to the list
-        setClients((existingClients) => [...existingClients, newClient], cb);
+        setClients(existingClients => [...existingClients, newClient], cb);
       }
     },
-    [clients, setClients]
+    [clients, setClients],
   );
 
   useEffect(() => {
@@ -74,11 +75,16 @@ export const useWebRTC = (roomId, user) => {
       async function handleNewPeer({ peerId, createOffer, user: remoteUser }) {
         if (peerId in connections.current) {
           console.warn(
-            `You are already connected with ${peerId} (${user.name})`
+            `You are already connected with ${peerId} (${user.name})`,
           );
         } else {
-          toast.success(`${remoteUser.name} connected`);
+          toast.success(`${remoteUser.name} joined the room`);
         }
+
+        socket.current.emit(ACTIONS.SYNC_CODE, {
+          code: codeRef.current,
+          peerId,
+        });
 
         // Create a new RTCPeerConnection and store it in connections
         connections.current[peerId] = new RTCPeerConnection({
@@ -86,7 +92,7 @@ export const useWebRTC = (roomId, user) => {
         });
 
         // Handle new ice candidate on this peer connection
-        connections.current[peerId].onicecandidate = (event) => {
+        connections.current[peerId].onicecandidate = event => {
           socket.current.emit(ACTIONS.RELAY_ICE, {
             peerId,
             icecandidate: event.candidate,
@@ -98,7 +104,7 @@ export const useWebRTC = (roomId, user) => {
           addNewClient({ ...remoteUser, muted: true }, () => {
             // get current users mute info
             const currentUser = clientsRef.current.find(
-              (client) => client.id === user.id
+              client => client.id === user.id,
             );
             if (currentUser) {
               socket.current.emit(ACTIONS.MUTE_INFO, {
@@ -126,7 +132,7 @@ export const useWebRTC = (roomId, user) => {
         };
 
         // Add connection to peer connections track
-        localMediaStream.current.getTracks().forEach((track) => {
+        localMediaStream.current.getTracks().forEach(track => {
           connections.current[peerId].addTrack(track, localMediaStream.current);
         });
 
@@ -153,10 +159,10 @@ export const useWebRTC = (roomId, user) => {
         delete audioElements.current[peerId];
 
         toast.success(
-          `${clientsRef.current.find((c) => c.id === userId).name} disconnected`
+          `${clientsRef.current.find(c => c.id === userId).name} disconnected`,
         );
 
-        setClients((list) => list.filter((c) => c.id !== userId));
+        setClients(list => list.filter(c => c.id !== userId));
       }
       async function handleIceCandidate({ peerId, icecandidate }) {
         if (icecandidate) {
@@ -168,7 +174,7 @@ export const useWebRTC = (roomId, user) => {
         sessionDescription: remoteSessionDescription,
       }) {
         connections.current[peerId].setRemoteDescription(
-          new RTCSessionDescription(remoteSessionDescription)
+          new RTCSessionDescription(remoteSessionDescription),
         );
 
         // If session description is offer then create an answer
@@ -186,10 +192,10 @@ export const useWebRTC = (roomId, user) => {
       }
       async function handleSetMute(mute, userId) {
         const clientIdx = clientsRef.current
-          .map((client) => client.id)
+          .map(client => client.id)
           .indexOf(userId);
         const allConnectedClients = JSON.parse(
-          JSON.stringify(clientsRef.current)
+          JSON.stringify(clientsRef.current),
         );
         if (clientIdx > -1) {
           allConnectedClients[clientIdx].muted = mute;
@@ -202,7 +208,7 @@ export const useWebRTC = (roomId, user) => {
 
     // / cleanup function defined in the return statement of the useEffect hook is responsible for cleaning up the resources when the component unmounts. It checks if localMediaStream exists, stops all tracks in the stream using getTracks().forEach((track) => track.stop()), and emits a LEAVE event to the server, passing the roomId. It also closes all the peer connections and removes the audio elements from the audioElements object.
     return () => {
-      localMediaStream.current.getTracks().forEach((track) => track.stop());
+      localMediaStream.current.getTracks().forEach(track => track.stop());
       socket.current.emit(ACTIONS.LEAVE, { roomId });
       for (let peerId in connections.current) {
         connections.current[peerId].close();
@@ -259,5 +265,6 @@ export const useWebRTC = (roomId, user) => {
     provideRef,
     socket,
     handleMute,
+    codeRef,
   };
 };
